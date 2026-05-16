@@ -5,7 +5,11 @@
     "const-name-snakecase": "error",
     "contract-name-camelcase": "error",
     "func-name-mixedcase": "error",
+    "func-visibility": ["error", {"ignoreConstructors": true}],
+    "var-name-mixedcase": "error",
     "no-empty-blocks": "warning",
-    "no-console": "warning"
+    "no-unused-vars": "error",
+    "ordering": "error",
+    "reason-string": ["warn", {"maxLength": 32}]
   }
 }
