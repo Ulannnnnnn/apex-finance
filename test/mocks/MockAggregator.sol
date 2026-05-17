@@ -18,13 +18,13 @@ contract MockAggregator {
         _decimals = decimalsValue;
     }
 
-    /// @dev Обновить цену (вызывается в тестах)
+    /// @dev Update the price (called in tests)
     function setAnswer(int256 newAnswer) external {
         _answer = newAnswer;
         _updatedAt = block.timestamp;
     }
 
-    /// @dev Вручную откатить время обновления назад (для тестирования staleness)
+    /// @dev Manually roll back the update time (for testing staleness)
     function setUpdatedAt(uint256 timestamp) external {
         _updatedAt = timestamp;
     }
