@@ -36,7 +36,7 @@ contract ApexToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
         _mint(to, amount);
     }
 
-    // --- Обязательные переопределения (Overrides) для совместимости расширений OpenZeppelin ---
+    //  Обязательные переопределения (Overrides) для совместимости расширений OpenZeppelin
 
     function _update(address from, address to, uint256 value) internal override(ERC20, ERC20Votes) {
         super._update(from, to, value);

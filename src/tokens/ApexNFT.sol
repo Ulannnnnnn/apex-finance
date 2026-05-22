@@ -27,7 +27,7 @@ contract ApexNFT is ERC721, ERC721URIStorage, Ownable {
         return tokenId;
     }
 
-    // --- Обязательные переопределения (Overrides) для OpenZeppelin ---
+    // Обязательные переопределения (Overrides) для OpenZeppelin 
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
