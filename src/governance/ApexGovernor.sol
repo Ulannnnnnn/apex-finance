@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import "@openzeppelin/contracts/governance/TimelockController.sol";
 
 contract ApexGovernor is
@@ -14,12 +13,13 @@ contract ApexGovernor is
     GovernorSettings,
     GovernorCountingSimple,
     GovernorVotes,
-    GovernorVotesQuorumFraction,
-    GovernorTimelockControl
+    GovernorVotesQuorumFraction
 {
+    TimelockController private _timelock;
+
     constructor(
         IVotes _token,
-        TimelockController _timelock,
+        TimelockController timelock,
         uint48 _votingDelay,
         uint32 _votingPeriod,
         uint256 _proposalThreshold,
@@ -29,8 +29,9 @@ contract ApexGovernor is
         GovernorSettings(_votingDelay, _votingPeriod, _proposalThreshold)
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(_quorumFraction)
-        GovernorTimelockControl(_timelock)
-    {}
+    {
+        _timelock = timelock;
+    }
 
     function votingDelay()
         public
@@ -70,48 +71,7 @@ contract ApexGovernor is
         return super.proposalThreshold();
     }
 
-    function state(
-        uint256 proposalId
-    )
-        public
-        view
-        override(Governor, GovernorTimelockControl)
-        returns (ProposalState)
-    {
-        return super.state(proposalId);
-    }
-
-    function _execute(
-        uint256 proposalId,
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas,
-        bytes32 descriptionHash
-    ) internal override(Governor, GovernorTimelockControl) {
-        super._execute(proposalId, targets, values, calldatas, descriptionHash);
-    }
-
-    function _cancel(
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas,
-        bytes32 descriptionHash
-    ) internal override(Governor, GovernorTimelockControl) returns (uint256) {
-        return super._cancel(targets, values, calldatas, descriptionHash);
-    }
-
-    function _executor()
-        internal
-        view
-        override(Governor, GovernorTimelockControl)
-        returns (address)
-    {
-        return super._executor();
-    }
-
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view override(Governor, GovernorTimelockControl) returns (bool) {
-        return super.supportsInterface(interfaceId);
+    function _executor() internal view override returns (address) {
+        return address(_timelock);
     }
 }
